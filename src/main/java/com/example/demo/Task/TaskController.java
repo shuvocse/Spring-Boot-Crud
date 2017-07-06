@@ -2,9 +2,12 @@ package com.example.demo.Task;
 
 import java.util.Date;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +35,7 @@ public class TaskController {
 	}
 	
 	@PostMapping(value = "/task/create")
-	public String createTask(Model model, @ModelAttribute TaskEntity taskEntity) {
+	public String createTask(Model model,@ModelAttribute TaskEntity taskEntity) {
 		if(taskEntity.getId()==null){
 			taskEntity.setDateCreated(new Date());
 		}else{
@@ -51,7 +54,20 @@ public class TaskController {
 		model.addAttribute("taskEntity", taskService.getTaskById(id));
 		model.addAttribute("title", "Update Task");
 		model.addAttribute("url", "update");
-		return "/add_task";
+		return "/update_task";
+	}
+	
+	@PostMapping(value = "/task/update")
+	public String updateTask(Model model, @ModelAttribute TaskEntity taskEntity) {
+		if(taskEntity.getId()==null){
+			taskEntity.setDateCreated(new Date());
+		}else{
+			TaskEntity taskEntityBeforeUpdate = taskService.getTaskById(taskEntity.getId());
+			taskEntity.setDateCreated(taskEntityBeforeUpdate.getDateCreated());
+			taskEntity.setDateUpdated(new Date());
+		}
+			taskService.saveTask(taskEntity);
+			return "redirect:/";
 	}
 
 

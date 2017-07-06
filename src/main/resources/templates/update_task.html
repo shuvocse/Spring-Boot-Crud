@@ -5,7 +5,8 @@
 </head>
 <body>
 <h3 th:text="${title}"></h3>
-		<form action="#" th:action="@{/task/create}" th:object="${taskEntity}" method="post" >
+		<form action="#" th:action="@{/task/update}" th:object="${taskEntity}" method="post" >
+			<input type="hidden" th:field="*{id}"></input>
 			<table>
 				<tr>
 					<td>Task Name: </td>
